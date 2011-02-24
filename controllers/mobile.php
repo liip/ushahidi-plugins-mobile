@@ -116,6 +116,9 @@ class Mobile_Controller extends Template_Controller {
 			->limit('10')
             ->orderby('item_date', 'desc')
             ->find_all();
+
+		// Get pages
+		$this->template->content->pages = ORM::factory('page')->where('page_active', '1')->find_all();
 	}
 	
 	private function _category_count($category_id = false)

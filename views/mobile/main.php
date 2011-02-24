@@ -69,6 +69,10 @@
 </div>
 <h2 class="block_title">More</h2>
 <div class="block">
-	<h2 class="other"><a href="#">Contact Us</a></h2>
-	<h2 class="other"><a href="#">About Us</a></h2>
+	<?php
+	foreach ($pages as $page)
+	{
+		echo '<h2 class="other"><a href="'.url::site().'page/index/'.$page->id.'">'.$page->page_tab . '</a></h2>';
+	}
+	?>
 </div>
