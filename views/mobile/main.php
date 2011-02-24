@@ -9,7 +9,7 @@
 			foreach ($incidents as $incident)
 			{
 				$incident_date = $incident->incident_date;
-				$incident_date = date('M j Y', strtotime($incident->incident_date));
+				$incident_date = date('H:i M d', strtotime($incident->incident_date));
 				echo "<li><strong><a href=\"".url::site()."mobile/reports/view/".$incident->id."\">".$incident->incident_title."</a></strong>";
 				echo "&nbsp;&nbsp;<i>$incident_date</i></li>";
 			}
@@ -24,7 +24,7 @@
 			<?php
 			foreach ($feeds as $feed)
 			{
-				$feed_date = date('M j Y', strtotime($feed->item_date));
+				$feed_date = date('H:i M d', strtotime($feed->item_date));
 				echo "<li><strong><a href=\"".$feed->item_link."\">".$feed->item_title."</a></strong>";
 				//echo "&nbsp;&nbsp;<i>$incident_date</i></li>";
 				echo "</li>";
