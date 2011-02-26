@@ -102,9 +102,7 @@ class Reports_Controller extends Mobile_Controller {
 				JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`) 
 				JOIN `" . $this->table_prefix . "category` AS c ON (c.`id` = ic.`category_id`) 
 				JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`) 
-			 WHERE `incident_active` = '1' $location_filter
-				ORDER BY incident_date 
-				DESC LIMIT ". (int) Kohana::config('mobile.items_per_page');
+			 WHERE `incident_active` = '1' $location_filter";
 			
 			
 		$pagination = new Pagination(array(
@@ -116,7 +114,12 @@ class Reports_Controller extends Mobile_Controller {
 		
 		$this->template->content->pagination = $pagination;
 
-		$incidents = $db->query($incidents_sql . " OFFSET {$pagination->sql_offset}");
+		$incidents = $db->query(
+			$incidents_sql . 
+				"ORDER BY incident_date DESC 
+				 LIMIT ". (int) Kohana::config('mobile.items_per_page') . "
+				 OFFSET {$pagination->sql_offset}"
+		);
 
 		$this->template->content->town = $town;
 		$this->template->content->incidents = $incidents;
