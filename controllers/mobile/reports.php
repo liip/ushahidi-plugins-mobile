@@ -61,6 +61,8 @@ class Reports_Controller extends Mobile_Controller {
 			
 		$this->template->content->incidents = $incidents;
 		$this->template->content->category = $category;
+		
+		$this->template->header->breadcrumbs = "&nbsp;&raquo;&nbsp;<a href=\"".url::site()."mobile/categories/\">Categories</a>";
 	}
 	
 	public function search($town = false)
