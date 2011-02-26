@@ -78,7 +78,7 @@ class Reports_Controller extends Mobile_Controller {
 		$town = isset($_GET['town']) ? $_GET['town'] : '';
         $categoryid = isset($_GET['category_id']) ? (int)$_GET['category_id'] : null;
         $distance = isset($_GET['distance']) ? (float)$_GET['distance'] : 0.5;
-        $order = $_GET['order'];
+        $order = isset($_GET['order']) ? $_GET['order'] : '';
         switch ($order) {
         case 'date':
            $order = 'coalesce(incident_datemodify, incident_dateadd) desc';
