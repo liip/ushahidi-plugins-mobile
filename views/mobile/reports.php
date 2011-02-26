@@ -28,12 +28,12 @@
 					}
 					?>
 				</select>
-				<label for="category">Category</label>
+				<!--<label for="category">Category</label>
 				<select name="category" id="category">
 					<option value="0">all</option>
 					<option value="la">la</option>
 					<option value="li">li</option>
-				</select>
+				</select>-->
 				<label for="order">Order By</label>
 				<select name="order" id="order">
 					<?php
