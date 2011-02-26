@@ -88,9 +88,6 @@ class Reports_Controller extends Mobile_Controller {
 			
 			$this->template->content->incident = $incident;
 			
-			$this->template->header->js->latitude = $incident->location->latitude;
-			$this->template->header->js->longitude = $incident->location->longitude;
-			
 			$page_no = (isset($_GET['p'])) ? $_GET['p'] : "";
 			$category_id = (isset($_GET['c'])) ? $_GET['c'] : "";
 			if ($category_id)
