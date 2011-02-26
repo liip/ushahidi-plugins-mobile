@@ -29,9 +29,9 @@
 					?>
 				</select>
 				<label for="category">Category</label>
-				<select name="category" id="category">
+				<select name="category_id" id="category_id">
 					<?php 
-						$selected_category = isset($_GET['category']) ? $_GET['category'] : '0';
+						$selected_category = isset($_GET['category_id']) ? $_GET['category_id'] : '0';
 						
 						echo '<option value="0"';
 						echo 0 == $selected_category ? 'selected' : '';
