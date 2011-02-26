@@ -288,7 +288,7 @@ class Reports_Controller extends Mobile_Controller {
 					$incident_category->save();
 				}
 				
-				url::redirect('reports/thanks');
+				url::redirect('mobile/reports/thanks');
 				
 			}
 			// No! We have validation errors, we need to show the form again, with the errors
@@ -324,6 +324,13 @@ class Reports_Controller extends Mobile_Controller {
 			$this->template->header->js->longitude = $form['longitude'];
 		}
 	}
+	
+	// http://ushahidi.dev/mobile
+	public function thanks()
+		{
+			$this->template->content = new View('mobile/reports_thanks');
+			$this->template->header->breadcrumbs = "&nbsp;&raquo;&nbsp;<a href=\"".url::site()."mobile/reports/submit/\">Submit A Report</a>";
+		}
 	
 	/*
 	 * Retrieves Categories
