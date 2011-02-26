@@ -1,7 +1,4 @@
 <div class="block">
-	<h2 class="submit"><a href="<?php echo url::site()."mobile/reports/submit/" ?>">Submit A Report</a></h2>
-</div>
-<div class="block">
 	<h2 class="expand">Recent Reports</h2>
 	<div class="collapse">
 		<ul>
