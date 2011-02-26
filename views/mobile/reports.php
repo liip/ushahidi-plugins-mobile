@@ -59,8 +59,10 @@
 					{
 						$incident_date = $incident->incident_date;
 						$incident_date = date('H:i M d', strtotime($incident->incident_date));
-						$lastupdated = $incident->last_updated;
-						$lastupdated = date('H:i M d', strtotime($incident->last_updated));
+						if(property_exists($incident, 'last_updated')){
+							$lastupdated = $incident->last_updated;
+							$lastupdated = date('H:i M d', strtotime($incident->last_updated));
+						}
 						$location_name = $incident->location_name;
 						echo '<li><span class="verified ';
 						if ($incident->incident_verified == 1)
@@ -69,7 +71,11 @@
 						}
 						echo '">Verified</span>';
 						echo "<strong><a href=\"".url::site()."mobile/reports/view/".$incident->id."?c=".$category_id."&p=".$page_no."\">".$incident->incident_title."</a></strong>";
-						echo "&nbsp;&nbsp;<i>$incident_date" . " (Updated ".$lastupdated.")</i>";
+						echo "&nbsp;&nbsp;<i>$incident_date";
+						if(isset($lastupdated)) {
+							echo "(Updated ".$lastupdated.")";
+						}
+						echo "</i>";
 						echo "<BR /><span class=\"location_name\">".$location_name."</span></li>";
 					}
 				}
