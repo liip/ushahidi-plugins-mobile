@@ -76,11 +76,24 @@ class Reports_Controller extends Mobile_Controller {
 		$db = new Database;
 		
 		$town = isset($_GET['town']) ? $_GET['town'] : '';
-		
+        $categoryid = isset($_GET['category_id']) ? (int)$_GET['category_id'] : null;
+        $distance = isset($_GET['distance']) ? (float)$_GET['distance'] : 0.5;
+        $order = $_GET['order'];
+        switch ($order) {
+        case 'date':
+           $order = 'coalesce(incident_datemodify, incident_dateadd) desc';
+           break;
+        case 'verified':
+            $order  = 'incident_verified desc';
+            break;
+        default:
+            $order = 'distance asc';
+        }
+
 		if (!empty($town)) {
 			$location = mobile_geocoder::geocode($town . ',New Zealand');
 		}
-		
+
 		// if we don't get location there will be no results rendered
 		if (!$location) {
 			$this->template->content->have_results = false;
@@ -88,27 +101,39 @@ class Reports_Controller extends Mobile_Controller {
 			return;
 		}
 
-		$incidents_sql = 
-"SELECT
-    	69.09 *
-    	DEGREES(
-    	  ACOS(
-    		SIN( RADIANS(latitude) )*SIN( RADIANS(" . $location['lat'] . ") ) 
-    	   +
-    		COS( RADIANS(latitude) )*COS( RADIANS(" . $location['lat'] . ") ) 
-    	   *
-    		COS( RADIANS(longitude - (" . $location['lon'] . ")) )
-    	  )
-    	) as DistanceRadius, 
-i.*, l.location_name
-FROM `".$this->table_prefix."incident` AS i 
-	JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`) 
-	JOIN `" . $this->table_prefix . "category` AS c ON (c.`id` = ic.`category_id`) 
-	JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`) 
-WHERE `incident_active` = '1' 
-HAVING DistanceRadius < 0.5
-";
-			
+        $fields = '
+            69.09 *
+            DEGREES(
+              ACOS(
+                SIN( RADIANS(latitude) )*SIN( RADIANS(' . $location['lat'] . ') )
+               +
+                COS( RADIANS(latitude) )*COS( RADIANS(' . $location['lat'] . ') )
+               *
+                COS( RADIANS(longitude - (' . $location['lon'] . ')) )
+              )
+            ) as distance,
+            i.*, l.location_name';
+
+        $where = '
+            WHERE `incident_active` = 1
+            ';
+
+        $having = "
+            HAVING distance < $distance
+            ";
+
+        $incidents_sql = "SELECT $fields
+            FROM `".$this->table_prefix."incident` AS i
+                JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`)";
+
+        if (!empty($categoryid)) {
+            $incidents_sql .= "
+                JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`)
+                ";
+            $where .= "AND  ic.category_id = $categoryid ";
+        }
+        $incidents_sql .= $where . $having;
+
 		$pagination = new Pagination(array(
 				'style' => 'mobile',
 				'query_string' => 'page',
@@ -119,8 +144,8 @@ HAVING DistanceRadius < 0.5
 		$this->template->content->pagination = $pagination;
 
 		$incidents = $db->query(
-			$incidents_sql . 
-				"ORDER BY incident_date DESC 
+			$incidents_sql .
+				"ORDER BY $order
 				 LIMIT ". (int) Kohana::config('mobile.items_per_page') . "
 				 OFFSET {$pagination->sql_offset}"
 		);
