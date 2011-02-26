@@ -68,6 +68,9 @@ class Reports_Controller extends Mobile_Controller {
 	
 	public function search($town = false)
 	{
+		$location = null;
+		$town = null;
+		
 		$this->template->content = new View('mobile/reports');
 		
 		$db = new Database;
