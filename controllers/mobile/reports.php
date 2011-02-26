@@ -112,7 +112,7 @@ class Reports_Controller extends Mobile_Controller {
                 COS( RADIANS(longitude - (' . $location['lon'] . ')) )
               )
             ) as distance,
-            i.*, l.location_name';
+            i.*,coalesce(incident_datemodify, incident_dateadd) as last_updated, l.location_name';
 
         $where = '
             WHERE `incident_active` = 1
