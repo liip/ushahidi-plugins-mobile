@@ -151,6 +151,9 @@ div#page{
 		font-style:italic;
 		font-size:90%;
 	}
+	.report_list .filter label{
+		margin-left: 10px;
+	}
 
 /* Report View Page */
 .report_info{
