@@ -5,11 +5,10 @@
 	<h2 class="expand">Find a Report</h2>
 	<div class="collapse shown">
 		<?php
-			echo '<form action="'.url::site().'mobile/search" method="get">';
+			echo '<form action="'.url::site().'mobile/reports/search" method="get">';
 		?>
-		<form action="" method="get">
 			<label for="town">Your Town</label>
-				<input type="text/submit/hidden/button" name="town" value="">
+				<input type="text" name="town" value="">
 				<input type="submit" value="Search &rarr;">
   		</form>
 		

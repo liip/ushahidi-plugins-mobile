@@ -63,6 +63,15 @@ class Reports_Controller extends Mobile_Controller {
 		$this->template->content->category = $category;
 	}
 	
+	public function search($town = false)
+	{
+		$this->template->content = new View('mobile/reports_search');
+		
+		
+		
+		$this->template->content->town = $town;
+	}
+	
 	/**
 	 * Displays a report.
 	 * @param boolean $id If id is supplied, a report with that id will be
