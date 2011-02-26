@@ -15,7 +15,7 @@
 		<div class="list">
 			<ul>
 				<?php
-				if ($incidents->count())
+				if ($have_results && $incidents->count())
 				{
 					$page_no = (isset($_GET['page'])) ? $_GET['page'] : "";
 					foreach ($incidents as $incident)
@@ -41,6 +41,6 @@
 				?>
 			</ul>
 		</div>
-		<?php echo $pagination; ?>
+		<?php if ($have_results) { echo $pagination; } ?>
 	</div>
 </div>

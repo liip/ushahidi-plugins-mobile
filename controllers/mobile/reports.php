@@ -76,8 +76,14 @@ class Reports_Controller extends Mobile_Controller {
 		if (!empty($town)) {
 			$location = mobile_geocoder::geocode($town);
 		}
+		
+		// if we don't get location there will be no results rendered
+		if (!$location) {
+			$this->template->content->have_results = false;
+			$this->template->content->category = 0;
+			return;
+		}
 
-		$location_filter = " AND 1 = 1";
 		if ($location) {
 			$lat_min = $location["lat"] - 0.05;
 			$lat_max = $location["lat"] + 0.05;
@@ -121,6 +127,7 @@ class Reports_Controller extends Mobile_Controller {
 				 OFFSET {$pagination->sql_offset}"
 		);
 
+		$this->template->content->have_results = true;
 		$this->template->content->town = $town;
 		$this->template->content->incidents = $incidents;
 		$this->template->content->category = 0;
