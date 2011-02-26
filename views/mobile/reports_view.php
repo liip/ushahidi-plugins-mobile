@@ -19,14 +19,8 @@
 	<h2><?php echo $incident->incident_title; ?></h2>
 	<ul class="details">
 		<li>
-			<small>Location</small>: 
-			<?php echo $incident->location->location_name; ?>
-		</li>
-		<li>
 			<small>Date</small>: 
 			<?php echo date('M j Y', strtotime($incident->incident_date)); ?>
-		</li>
-		<li>
 			<small>Time</small>: 
 			<?php echo date('H:i', strtotime($incident->incident_date)); ?>
 		</li>		
@@ -37,4 +31,6 @@
 	</ul>
 </div>
 <div style="clear:both;"></div>
-<div id="map_canvas"></div>
+<a href="http://maps.google.com/?t=map&q=<?php echo $incident->location->latitude; ?>,<?php echo $incident->location->longitude; ?>">
+    <img id="staticmap" src="http://maps.google.com/maps/api/staticmap?markers=<?php echo $incident->location->latitude; ?>,<?php echo $incident->location->longitude; ?>&zoom=13&maptype=road&sensor=false&size=128x128" />
+</a>
