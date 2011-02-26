@@ -29,9 +29,12 @@ $(function() {
 if ($show_map === TRUE) {
 	echo " onload=\"initialize()\"";
 }
-?>>
+?>
 	<div id="container">
 		<div id="navigation">
-			&raquo;&nbsp;<a href="<?php echo url::site()."mobile"; ?>">Home</a><?php echo $breadcrumbs; ?>
+			<h1><a href="<?php echo url::site()."mobile"; ?>"><?php echo $site_name; ?></a></h1>
+			<?php if(!empty($breadcrumbs)) {
+				echo '<a href="'. url::site().'"mobile">Home</a>' . $breadcrumbs; 
+			}?>
 		</div>
 		<div id="page">
