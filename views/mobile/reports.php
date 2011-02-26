@@ -14,9 +14,9 @@
 		?>
 		<div class="other filter">
 			<form action=<?php echo url::site() . '/mobile/reports/search' ?> method="get" accept-charset="utf-8">
-				<label for="town">Your town</label>
-				<input type="text" name="town" value="<?php echo isset($_GET['town']) ? $_GET['town'] : ''; ?>">
-				<label for="distance">Distance</label>
+				<div><label for="town">Your town</label>
+				<input type="text" name="town" value="<?php echo isset($_GET['town']) ? $_GET['town'] : ''; ?>"></div>
+				<div><label for="distance">Distance</label>
 				<select name="distance" id="distance">
 					<?php
 					$distance_options = array('0.5', '1', '2', '3', '7', '10', '20');
@@ -27,8 +27,8 @@
 						echo '>' . $option . ' km</option>';
 					}
 					?>
-				</select>
-				<label for="category">Category</label>
+				</select></div>
+				<div><label for="category">Category</label>
 				<select name="category_id" id="category_id">
 					<?php 
 						$selected_category = isset($_GET['category_id']) ? $_GET['category_id'] : '0';
@@ -52,8 +52,8 @@
 						}
 					} 
 				?>
-				</select>
-				<label for="order">Order By</label>
+				</select></div>
+				<div><label for="order">Order By</label>
 				<select name="order" id="order">
 					<?php
 					$order_options = array('distance', 'date', 'verified');
@@ -64,7 +64,7 @@
 						echo '>' . $option . '</option>';
 					}
 					?>
-				</select>
+				</select></div>
 				<input type="submit" value="Search &rarr;">
 			</form>
 		</div>
