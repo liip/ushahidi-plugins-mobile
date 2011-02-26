@@ -28,12 +28,31 @@
 					}
 					?>
 				</select>
-				<!--<label for="category">Category</label>
+				<label for="category">Category</label>
 				<select name="category" id="category">
-					<option value="0">all</option>
-					<option value="la">la</option>
-					<option value="li">li</option>
-				</select>-->
+					<?php 
+						$selected_category = isset($_GET['category']) ? $_GET['category'] : '0';
+						
+						echo '<option value="0"';
+						echo 0 == $selected_category ? 'selected' : '';
+						echo '>All categories</option>';
+						
+						foreach ($categories as $category) {
+							
+						echo '<option value="' . $category->id . '"';
+						echo $category->id == $selected_category ? 'selected' : '';
+						echo '>' . $category->category_title . '</option>';
+						
+						if ($category->children->count() > 0) {
+							foreach ($category->children as $child) {
+								echo '<option value="' . $child->id . '"';
+								echo $child->id == $selected_category ? 'selected' : '';
+								echo '>--' . $child->category_title . '</option>';
+							}
+						}
+					} 
+				?>
+				</select>
 				<label for="order">Order By</label>
 				<select name="order" id="order">
 					<?php
