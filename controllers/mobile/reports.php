@@ -74,7 +74,7 @@ class Reports_Controller extends Mobile_Controller {
 		$town = isset($_GET['town']) ? $_GET['town'] : '';
 		
 		if (!empty($town)) {
-			$location = mobile_geocoder::geocode($town);
+			$location = mobile_geocoder::geocode($town . ',New Zealand');
 		}
 		
 		// if we don't get location there will be no results rendered
@@ -84,32 +84,26 @@ class Reports_Controller extends Mobile_Controller {
 			return;
 		}
 
-		if ($location) {
-			$lat_min = $location["lat"] - 0.05;
-			$lat_max = $location["lat"] + 0.05;
-
-			$lon_min = $location["lon"] - 0.05;
-			$lon_max = $location["lon"] + 0.05;
-			
-			$location_filter = " AND  (l.latitude between $lat_min and $lat_max) 
-		 		AND  (l.longitude between $lon_min and $lon_max)";
-			
-		}		
-		
-		
-		// TODO: taken roughy for start!!! have to do more proper math afterwards
-		// 1 degree of latitude is 111k
-		// 1 degree of longituded is 100k
-		
-		// Pagination
 		$incidents_sql = 
-			"SELECT DISTINCT i.*, l.location_name 
-			 FROM `".$this->table_prefix."incident` AS i 
-				JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`) 
-				JOIN `" . $this->table_prefix . "category` AS c ON (c.`id` = ic.`category_id`) 
-				JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`) 
-			 WHERE `incident_active` = '1' $location_filter";
-			
+"SELECT
+    	69.09 *
+    	DEGREES(
+    	  ACOS(
+    		SIN( RADIANS(latitude) )*SIN( RADIANS(" . $location['lat'] . ") ) 
+    	   +
+    		COS( RADIANS(latitude) )*COS( RADIANS(" . $location['lat'] . ") ) 
+    	   *
+    		COS( RADIANS(longitude - (" . $location['lon'] . ")) )
+    	  )
+    	) as DistanceRadius, 
+i.*, l.location_name
+FROM `".$this->table_prefix."incident` AS i 
+	JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`) 
+	JOIN `" . $this->table_prefix . "category` AS c ON (c.`id` = ic.`category_id`) 
+	JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`) 
+WHERE `incident_active` = '1' 
+HAVING DistanceRadius < 0.5
+";
 			
 		$pagination = new Pagination(array(
 				'style' => 'mobile',
