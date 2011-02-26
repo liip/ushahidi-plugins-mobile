@@ -153,7 +153,15 @@ class Reports_Controller extends Mobile_Controller {
 		$this->template->content->have_results = true;
 		$this->template->content->town = $town;
 		$this->template->content->incidents = $incidents;
-		$this->template->content->category = 0;
+		$this->template->content->category = null;
+		
+		
+		$this->templat->content->categories = ORM::factory('category')
+		    ->where('category_visible', '1')
+		    ->where('parent_id', '0')
+		    ->where('category_trusted != 1')
+		    ->orderby('category_title', 'ASC')
+		    ->find_all();
 	}	
 	
 	/**
