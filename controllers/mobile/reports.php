@@ -67,12 +67,61 @@ class Reports_Controller extends Mobile_Controller {
 	
 	public function search($town = false)
 	{
-		$this->template->content = new View('mobile/reports_search');
+		$this->template->content = new View('mobile/reports');
+		
+		$db = new Database;
+		
+		$town = isset($_GET['town']) ? $_GET['town'] : '';
+		
+		if (!empty($town)) {
+			$location = mobile_geocoder::geocode($town);
+		}
+
+		$location_filter = " AND 1 = 1";
+		if ($location) {
+			$lat_min = $location["lat"] - 0.05;
+			$lat_max = $location["lat"] + 0.05;
+
+			$lon_min = $location["lon"] - 0.05;
+			$lon_max = $location["lon"] + 0.05;
+			
+			$location_filter = " AND  (l.latitude between $lat_min and $lat_max) 
+		 		AND  (l.longitude between $lon_min and $lon_max)";
+			
+		}		
 		
 		
+		// TODO: taken roughy for start!!! have to do more proper math afterwards
+		// 1 degree of latitude is 111k
+		// 1 degree of longituded is 100k
 		
+		// Pagination
+		$incidents_sql = 
+			"SELECT DISTINCT i.*, l.location_name 
+			 FROM `".$this->table_prefix."incident` AS i 
+				JOIN `" . $this->table_prefix . "incident_category` AS ic ON (i.`id` = ic.`incident_id`) 
+				JOIN `" . $this->table_prefix . "category` AS c ON (c.`id` = ic.`category_id`) 
+				JOIN `" . $this->table_prefix . "location` AS l ON (i.`location_id` = l.`id`) 
+			 WHERE `incident_active` = '1' $location_filter
+				ORDER BY incident_date 
+				DESC LIMIT ". (int) Kohana::config('mobile.items_per_page');
+			
+			
+		$pagination = new Pagination(array(
+				'style' => 'mobile',
+				'query_string' => 'page',
+				'items_per_page' => (int) Kohana::config('mobile.items_per_page'),
+				'total_items' => $db->query($incidents_sql)->count()
+		));
+		
+		$this->template->content->pagination = $pagination;
+
+		$incidents = $db->query($incidents_sql . " OFFSET {$pagination->sql_offset}");
+
 		$this->template->content->town = $town;
-	}
+		$this->template->content->incidents = $incidents;
+		$this->template->content->category = 0;
+	}	
 	
 	/**
 	 * Displays a report.
