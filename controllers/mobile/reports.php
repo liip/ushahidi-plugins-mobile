@@ -355,9 +355,8 @@ class Reports_Controller extends Mobile_Controller {
 	{
 		$categories = ORM::factory('category')
 			->where('category_visible', '1')
-			->where('parent_id', '0')
 			->where('category_trusted != 1')
-            ->where("category_title = 'Mobile'")
+			->where("category_title = 'Mobile'")
 			->orderby('category_title', 'ASC')
 			->find_all();
 
