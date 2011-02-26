@@ -107,7 +107,7 @@ class Reports_Controller extends Mobile_Controller {
 					->find($category_id);
 				if ($category->loaded)
 				{
-					$this->template->header->breadcrumbs = "&nbsp;&raquo;&nbsp;<a href=\"".url::site()."mobile/reports/index/".$category_id."?page=".$page_no."\">".$category->category_title."</a>";
+					$this->template->header->breadcrumbs = "&nbsp;&raquo;&nbsp;<a href=\"".url::site()."mobile/categories/\">Categories</a>&nbsp;&raquo;&nbsp;<a href=\"".url::site()."mobile/reports/index/".$category_id."?page=".$page_no."\">".$category->category_title."</a>";
 				}
 			}
 		}
