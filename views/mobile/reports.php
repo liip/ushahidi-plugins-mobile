@@ -23,7 +23,13 @@
 						$incident_date = $incident->incident_date;
 						$incident_date = date('M j Y', strtotime($incident->incident_date));
 						$location_name = $incident->location_name;
-						echo "<li><strong><a href=\"".url::site()."mobile/reports/view/".$incident->id."?c=".$category_id."&p=".$page_no."\">".$incident->incident_title."</a></strong>";
+						echo '<li><span class="verified ';
+						if ($incident->incident_verified == 1)
+						{
+							echo "verified_yes";
+						}
+						echo '">Verified</span>';
+						echo "<strong><a href=\"".url::site()."mobile/reports/view/".$incident->id."?c=".$category_id."&p=".$page_no."\">".$incident->incident_title."</a></strong>";
 						echo "&nbsp;&nbsp;<i>$incident_date</i>";
 						echo "<BR /><span class=\"location_name\">".$location_name."</span></li>";
 					}

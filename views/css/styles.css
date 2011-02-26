@@ -159,11 +159,9 @@ div#page{
 	.report_info h2{
 		font-size:16px;
 	}
-	.report_info .verified{
+	.report_info .verified, .report_list li span.verified{
 		float:right;
 		background-color:#ccc;
-	}
-	.report_info .verified{
 	    background: #A60003;
 	    padding:5px;
 	    float: right;
@@ -174,7 +172,7 @@ div#page{
 	    text-align: center;
 	    margin: 0 0 0 10px;
 	}
-	.report_info .verified_yes{
+	.report_info .verified_yes, .report_list li span.verified_yes{
 		background: #368c00;
 	}
 	.report_info .verified span{
