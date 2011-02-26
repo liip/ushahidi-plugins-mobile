@@ -132,6 +132,7 @@ class Reports_Controller extends Mobile_Controller {
 		(
 			'incident_title' => '',
 			'incident_description' => '',
+            /*
 			'incident_month' => '',
 			'incident_day' => '',
 			'incident_year' => '',
@@ -140,8 +141,9 @@ class Reports_Controller extends Mobile_Controller {
 			'incident_ampm' => '',
 			'latitude' => '',
 			'longitude' => '',
+            */
 			'location_name' => '',
-			'country_id' => '',
+			//'country_id' => '',
 			'incident_category' => array(),
 		);
 		//	copy the form as errors, so the errors will be stored with keys corresponding to the form field names
@@ -159,12 +161,14 @@ class Reports_Controller extends Mobile_Controller {
 
 
 		// Initialize Default Values
+        /*
 		$form['incident_month'] = date('m');
 		$form['incident_day'] = date('d');
 		$form['incident_year'] = date('Y');
 		$form['incident_hour'] = "12";
 		$form['incident_minute'] = "00";
 		$form['incident_ampm'] = "pm";
+         */
 		// initialize custom field array
 		// $form['custom_field'] = $this->_get_custom_form_fields($id,'',true);
 		//GET custom forms
@@ -188,6 +192,7 @@ class Reports_Controller extends Mobile_Controller {
 			// Add some rules, the input field, followed by a list of checks, carried out in order
 			$post->add_rules('incident_title', 'required', 'length[3,200]');
 			$post->add_rules('incident_description', 'required');
+            /*
 			$post->add_rules('incident_month', 'required', 'numeric', 'between[1,12]');
 			$post->add_rules('incident_day', 'required', 'numeric', 'between[1,31]');
 			$post->add_rules('incident_year', 'required', 'numeric', 'length[4,4]');
@@ -208,8 +213,10 @@ class Reports_Controller extends Mobile_Controller {
 			// Validate for maximum and minimum latitude values
 			$post->add_rules('latitude', 'between[-90,90]');
 			$post->add_rules('longitude', 'between[-180,180]');
+             */
 			$post->add_rules('location_name', 'required', 'length[3,200]');
 
+            /*
 			//XXX: Hack to validate for no checkboxes checked
 			if (!isset($_POST['incident_category'])) {
 				$post->incident_category = "";
@@ -219,6 +226,7 @@ class Reports_Controller extends Mobile_Controller {
 			{
 				$post->add_rules('incident_category.*', 'required', 'numeric');
 			}
+             */
 			
 			// Geocode Location
 			if ( empty($_POST['latitude']) AND empty($_POST['longitude']) 
@@ -271,12 +279,14 @@ class Reports_Controller extends Mobile_Controller {
 				$incident->incident_title = $post->incident_title;
 				$incident->incident_description = $post->incident_description;
 
+                /*
 				$incident_date = $post->incident_year."-".$post->incident_month."-".$post->incident_day;
 				$incident_time = $post->incident_hour
 					.":".$post->incident_minute
 					.":00 ".$post->incident_ampm;
 				$incident->incident_date = date( "Y-m-d H:i:s", strtotime($incident_date . " " . $incident_time) );				
-				$incident->incident_dateadd = date("Y-m-d H:i:s",time());
+                 */
+				$incident->incident_dateadd = $incident->incident_date =  date("Y-m-d H:i:s",time());
 				$incident->save();
 
 				// STEP 3: SAVE CATEGORIES
@@ -311,10 +321,15 @@ class Reports_Controller extends Mobile_Controller {
 		$this->template->content->errors = $errors;
 		$this->template->content->form_error = $form_error;
 		$this->template->content->categories = $this->_get_categories($form['incident_category']);
-		
+        $mobilecat = 0;
+        if ($mobilecat = $this->template->content->categories->current()) {
+            $mobilecat = $mobilecat->id;
+        }
+		$this->template->content->mobilecategory = $mobilecat;
 		$this->template->content->cities = $this->_get_cities();
 		
 		$this->template->header->js = new View('mobile/reports_submit_js');
+        /*
 		if (!$form['latitude'] || !$form['latitude'])
 		{
 			$this->template->header->js->latitude = Kohana::config('settings.default_lat');
@@ -323,6 +338,7 @@ class Reports_Controller extends Mobile_Controller {
 			$this->template->header->js->latitude = $form['latitude'];
 			$this->template->header->js->longitude = $form['longitude'];
 		}
+         */
 	}
 	
 	// http://ushahidi.dev/mobile
@@ -341,6 +357,7 @@ class Reports_Controller extends Mobile_Controller {
 			->where('category_visible', '1')
 			->where('parent_id', '0')
 			->where('category_trusted != 1')
+            ->where("category_title = 'Mobile'")
 			->orderby('category_title', 'ASC')
 			->find_all();
 
